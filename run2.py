@@ -28,22 +28,15 @@ for link in linkslist:
     parturl = atags['href']
     contacturl = baseurl + parturl
     contactlinkslist.append(contacturl)
-    # contactpageurl = requests.get(testing, headers=headers)
-    # newtest = BeautifulSoup(contactpageurl.content, 'lxml')
-    # print(newtest)    
 
-# print(len(contactlinkslist))
-
-
-# print(contactlinkslist)
+    
+contactnameslist = []
 
 for link in contactlinkslist:
     r = requests.get(link, headers=headers)
     soup = BeautifulSoup(r.content, 'lxml')
-    atags = soup.find('div', class_='atPanelContainer').find('dl').find('dd')
-    print(atags)
+    atags = soup.find('div', class_='atPanelContainer').find('dl')
+    contactnameslist.append(atags)
 
-      
-
-
-
+    
+print(contactnameslist)
