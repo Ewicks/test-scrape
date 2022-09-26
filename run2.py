@@ -24,15 +24,24 @@ contactlinkslist = []
 for link in linkslist:
     r = requests.get(link, headers=headers)
     soup = BeautifulSoup(r.content, 'lxml')
-    atags = soup.find("div", id='atPubMenu').find("a")
-    print(atags['href'])
-
-    # testing = baseurl + parturl
+    atags = soup.find('div', id='atPubMenu').find('a')
+    parturl = atags['href']
+    contacturl = baseurl + parturl
+    contactlinkslist.append(contacturl)
     # contactpageurl = requests.get(testing, headers=headers)
     # newtest = BeautifulSoup(contactpageurl.content, 'lxml')
     # print(newtest)    
 
 # print(len(contactlinkslist))
+
+
+# print(contactlinkslist)
+
+for link in contactlinkslist:
+    r = requests.get(link, headers=headers)
+    soup = BeautifulSoup(r.content, 'lxml')
+    atags = soup.find('div', class_='atPanelContainer').find('dl').find('dd')
+    print(atags)
 
       
 
