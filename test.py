@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import re
 
 baseurl = 'https://emaps.elmbridge.gov.uk/ebc_planning.aspx'
 
@@ -12,23 +13,11 @@ soup = BeautifulSoup(r.content, 'lxml')
 
 houselist = soup.find_all('tr')
 
-list = []
+addressList = []
+propolsalsList = []
+
 
 for house in houselist:
-    for link in house.find_all('td', class_="address"):
-        link.get_text()
-
-
-propolsals = []
-
-text = 'extension'
-
-for house in houselist:
-    for link in house.find_all('td', class_="proposal"):
-        proposalText = link.get_text()
-        propolsals.append(proposalText)
-
-
-for i in propolsals:
-    print(i(text=lambda t: "extension" in t.text)
-
+    for link in house.find_all('td', string=re.compile('extension')):
+        print(link.get_text())
+        
