@@ -13,15 +13,16 @@ appList = soup.findAll('tr')
 links = []
 
 for section in appList: # row in the column
-    for link in section.findAll('a', href=True): # each row find all a tags
+    for link in section.find_all('a', href=True): # each row find all a tags
         newUrl = link['href']
         detailsUrl = requests.get(newUrl)
         soup = BeautifulSoup(detailsUrl.content, 'lxml')
         detailsPageLinks = soup.find('div', id='atPubMenu')
         contactLinks = detailsPageLinks.a['href']
+        # print(contactLinks)
         contactUrl = requests.get(baseurl + contactLinks)
         soup1 = BeautifulSoup(contactUrl.content, 'lxml')
-        print(soup1)
+        # print(soup1)
         for x in soup1:
             text = soup.find('div', id='atPubContainer')
             moretext = text.findAll('div', class_='atLeftPanel')
