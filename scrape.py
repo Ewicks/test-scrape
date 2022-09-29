@@ -8,7 +8,6 @@ soup = BeautifulSoup(src, 'lxml')
 
 results = soup.find(class_="job_list")
 
-# print(results.prettify())
 
 job_elements = results.find_all("div", class_="job")
 # print(job_elements)

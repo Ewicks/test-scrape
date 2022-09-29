@@ -1,10 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+import pandas as pd
+import time
 
 baseurl = 'https://emaps.elmbridge.gov.uk/ebc_planning.aspx'
 
-headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36'}
+headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36'}
 
 r = requests.get('https://emaps.elmbridge.gov.uk/ebc_planning.aspx?pageno=1&template=AdvancedSearchResultsTab.tmplt&requestType=parseTemplate&USRN%3APARAM=&apptype%3APARAM=&status%3APARAM=&decision%3APARAM=&ward%3APARAM=&txt_search%3APARAM=&daterec_from%3APARAM=2022-06-01&daterec_to%3APARAM=2022-09-30&datedec_from%3APARAM=&datedec_to%3APARAM=&pagerecs=50&orderxyz%3APARAM=REG_DATE_DT%3ADESCENDING&SearchType%3APARAM=Advanced', headers=headers)
 
@@ -12,6 +14,7 @@ soup = BeautifulSoup(r.content, 'lxml')
 
 houselist = soup.find_all('tr')
 
+time.sleep(10)
 linkslist = []
 
 updatehouselist = []
@@ -22,6 +25,7 @@ addresslist = []
 for house in houselist:
     if (house.find('td', string=re.compile('extension'))):
         updatehouselist.append(house)
+
 
 for house in updatehouselist:
     address = house.find('td', class_='address')
@@ -40,17 +44,20 @@ for link in linkslist:
     contacturl = baseurl + parturl
     contactlinkslist.append(contacturl)
 
-
+time.sleep(20)
 contactnameslist = []
+
+data = []
 
 for link in contactlinkslist:
     r = requests.get(link, headers=headers)
     soup = BeautifulSoup(r.content, 'lxml')
-    atags = soup.find('div', class_='atPanelContainer').find('dl')
+    atags = soup.find('div', class_='atPanelContainer').find('dd').find_next('dd').contents[0]
     contactnameslist.append(atags.get_text())
 
-    
-# print(contactnameslist)
-# print(addresslist)
+time.sleep(15)
 for i, t in enumerate(zip(addresslist, contactnameslist)):
-    print(i, t)
+    it = (i, t)
+    data.append(it)
+
+print(data)
