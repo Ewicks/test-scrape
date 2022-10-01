@@ -50,8 +50,10 @@ updatehouselist = []
 addresslist = []
 
 # Get all house sections that contain keyword in a list
+words_search_for = 'variation|extension'
+
 for house in houselist:
-    if (house.find('td', string=re.compile('variation', flags=re.I))):
+    if (house.find('td', string=re.compile((words_search_for), flags=re.I))):
         updatehouselist.append(house)
 
 
