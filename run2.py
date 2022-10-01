@@ -9,13 +9,18 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
+
+baseurl = 'https://emaps.elmbridge.gov.uk/ebc_planning.aspx'
+
+headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0) Gecko/20100101 Firefox/104.0'}
+
+
 def send_request(url):
     with TorRequests() as tor_requests:
         with tor_requests.get_session() as sess:
             # print the IP address of the proxy
             print(sess.get("http://httpbin.org/ip").json())
             html_content = sess.get(url, timeout=10).text
-            # your scraping code here ..
 
 
 if __name__ == "__main__":
@@ -30,10 +35,6 @@ if __name__ == "__main__":
         except Exception as e:
             print(e)
             pass
-
-baseurl = 'https://emaps.elmbridge.gov.uk/ebc_planning.aspx'
-
-headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0) Gecko/20100101 Firefox/104.0'}
 
 r = requests.get('https://emaps.elmbridge.gov.uk/ebc_planning.aspx?pageno=1&template=AdvancedSearchResultsTab.tmplt&requestType=parseTemplate&USRN%3APARAM=&apptype%3APARAM=&status%3APARAM=&decision%3APARAM=&ward%3APARAM=&txt_search%3APARAM=&daterec_from%3APARAM=2022-09-17&daterec_to%3APARAM=2022-09-29&datedec_from%3APARAM=&datedec_to%3APARAM=&pagerecs=50&orderxyz%3APARAM=REG_DATE_DT%3ADESCENDING&SearchType%3APARAM=Advanced', headers=headers)
 
@@ -50,7 +51,7 @@ addresslist = []
 
 # Get all house sections that contain keyword in a list
 for house in houselist:
-    if (house.find('td', string=re.compile('extension'))):
+    if (house.find('td', string=re.compile('variation', flags=re.I))):
         updatehouselist.append(house)
 
 
